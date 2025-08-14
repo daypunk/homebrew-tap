@@ -1,21 +1,21 @@
 class Punkdoku < Formula
     desc "Sudoku for punks"
     homepage "https://github.com/daypunk/punkdoku"
-    version "v1.0.8"
+    version "v1.0.9"
   
     on_macos do
       if Hardware::CPU.arm?
-        url "https://github.com/daypunk/punkdoku/releases/download/v1.0.8/punkdoku-macos-arm64"
-        sha256 "c4b05b97a2121fe9227af86559e5f7c7bc1564392b99745c99ea3de0ef3c74f6"
+        url "https://github.com/daypunk/punkdoku/releases/download/v1.0.9/punkdoku-macos-arm64"
+        sha256 "6c600e62ab1f3c1b04201cd031407da53623593d27ac7f9abef56d8956048ecb"
       else
-        url "https://github.com/daypunk/punkdoku/releases/download/v1.0.8/punkdoku-macos-amd64"
-        sha256 "4613484530d4ed5cb7aaa84a9aa9659c817456c738e55409c0d470519df262f1"
+        url "https://github.com/daypunk/punkdoku/releases/download/v1.0.9/punkdoku-macos-amd64"
+        sha256 "d0cefdf14fb744342c5eed298c87d28574296973fadbddca8359d6955f9aa98e"
       end
     end
   
     on_linux do
-      url "https://github.com/daypunk/punkdoku/releases/download/v1.0.8/punkdoku-linux"
-      sha256 "1d80c47a48793f7bfc13e6f0cb7d84fe6600721a8a9c60f7d194cf017b6aaf50"
+      url "https://github.com/daypunk/punkdoku/releases/download/v1.0.9/punkdoku-linux"
+      sha256 "d8134da1240a4f8a5c45c3e5f73c11c9143a44ef989f86def466d467ec6207da"
     end
   
     def install
