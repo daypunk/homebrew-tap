@@ -4,6 +4,10 @@ on:
   repository_dispatch:
     types: [punkdoku-updated]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -29,17 +33,12 @@ jobs:
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/punkdoku.rb
           sed -i "s/sha256 \".*\"/sha256 \"${SHA256_ARM64}\"/" Formula/punkdoku.rb
           
-          # Commit and push
+          # Commit changes
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add Formula/punkdoku.rb
           git commit -m "Update punkdoku to ${VERSION}"
-          git push
+          
+          # Push directly to main
+          git push origin main
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "Update punkdoku to ${{ github.event.client_payload.version }}"
-          body: "Automated update from punkdoku release"
-          branch: update-punkdoku-${{ github.event.client_payload.version }}
