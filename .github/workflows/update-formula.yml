@@ -19,19 +19,31 @@ jobs:
         run: |
           # Get version from event
           VERSION="${{ github.event.client_payload.version }}"
-          TAG="${{ github.event.client_payload.tag }}"
           
           # Download and calculate SHA256 for macOS arm64
-          curl -L "https://github.com/daypunk/punkdoku/releases/download/${TAG}/punkdoku-macos-arm64" -o punkdoku-macos-arm64
+          curl -L "https://github.com/daypunk/punkdoku/releases/download/${VERSION}/punkdoku-macos-arm64" -o punkdoku-macos-arm64
           SHA256_ARM64=$(shasum -a 256 punkdoku-macos-arm64 | cut -d' ' -f1)
           
           # Download and calculate SHA256 for macOS amd64
-          curl -L "https://github.com/daypunk/punkdoku/releases/download/${TAG}/punkdoku-macos-amd64" -o punkdoku-macos-amd64
+          curl -L "https://github.com/daypunk/punkdoku/releases/download/${VERSION}/punkdoku-macos-amd64" -o punkdoku-macos-amd64
           SHA256_AMD64=$(shasum -a 256 punkdoku-macos-amd64 | cut -d' ' -f1)
+          
+          # Download and calculate SHA256 for Linux
+          curl -L "https://github.com/daypunk/punkdoku/releases/download/${VERSION}/punkdoku-linux" -o punkdoku-linux
+          SHA256_LINUX=$(shasum -a 256 punkdoku-linux | cut -d' ' -f1)
           
           # Update Formula/punkdoku.rb
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/punkdoku.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${SHA256_ARM64}\"/" Formula/punkdoku.rb
+
+          # Update URLs to the new version
+          sed -i 's|url "https://github.com/daypunk/punkdoku/releases/download/.*/punkdoku-macos-arm64"|url "https://github.com/daypunk/punkdoku/releases/download/'"${VERSION}"'/punkdoku-macos-arm64"|' Formula/punkdoku.rb
+          sed -i 's|url "https://github.com/daypunk/punkdoku/releases/download/.*/punkdoku-macos-amd64"|url "https://github.com/daypunk/punkdoku/releases/download/'"${VERSION}"'/punkdoku-macos-amd64"|' Formula/punkdoku.rb
+          sed -i 's|url "https://github.com/daypunk/punkdoku/releases/download/.*/punkdoku-linux"|url "https://github.com/daypunk/punkdoku/releases/download/'"${VERSION}"'/punkdoku-linux"|' Formula/punkdoku.rb
+
+          # Update sha256 immediately following each artifact URL
+          sed -i '/punkdoku-macos-arm64/{n;s/sha256 \".*\"/sha256 \"'"${SHA256_ARM64}"'\"/;}' Formula/punkdoku.rb
+          sed -i '/punkdoku-macos-amd64/{n;s/sha256 \".*\"/sha256 \"'"${SHA256_AMD64}"'\"/;}' Formula/punkdoku.rb
+          sed -i '/punkdoku-linux/{n;s/sha256 \".*\"/sha256 \"'"${SHA256_LINUX}"'\"/;}' Formula/punkdoku.rb
           
           # Commit changes
           git config --local user.email "action@github.com"
