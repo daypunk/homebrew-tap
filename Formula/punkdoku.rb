@@ -1,4 +1,4 @@
-class Pundoku < Formula
+class Punkdoku < Formula
     desc "Sudoku for punks"
     homepage "https://github.com/daypunk/punkdoku"
     version "v1.0.0"
